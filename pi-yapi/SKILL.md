@@ -1,6 +1,6 @@
 ---
 name: pi-yapi
-description: Use when exporting YApi interface documentation to local project docs/yapi/ directory, querying API details, or generating structured parameter references from YApi platform. Supports project, category, and individual interface queries.
+description: Use when user provides YApi URL (matches http://10.0.53.135/project/{project_id}/interface/api/{interface_id} or http://10.0.53.135/project/{project_id}/interface/api/cat_{cat_id}) or requests YApi interface documentation export/query. URL trigger prompts user for intent before action.
 ---
 
 # PI YApi Skill
@@ -193,6 +193,32 @@ docs/
 | spaceCode | string | Space code | Yes |
 ```
 
+---
+
+## URL Trigger Flow
+
+When user provides a YApi URL, **ASK FIRST** before taking action:
+
+**Question:**
+> "检测到 YApi 链接。请确认您需要的操作：
+> 1. **查看接口** — 仅显示接口详情，不生成文件
+> 2. **导出到本地** — 生成 Markdown 文档到 `docs/yapi/`
+> 3. **更新现有文档** — 已有文档时增量更新
+> 4. **重新生成** — 覆盖现有文档（全量）
+
+**URL Pattern Detection:**
+
+| URL Pattern | Extracted ID | Default Suggestion |
+|-------------|--------------|-------------------|
+| `/interface/api/{id}` | interface_id | 查看接口 |
+| `/interface/api/cat_{id}` | cat_id | 导出分类 |
+
+**Example:**
+- User: `http://10.0.53.135/project/3054/interface/api/187387`
+- Skill: "检测到单个接口链接。建议操作：查看接口。请确认或选择其他操作。"
+
+---
+
 ## Interface Detail -- Key Fields
 
 Fields returned in the `data` object from `/api/interface/get`:
@@ -220,3 +246,23 @@ When a response returns `40011`:
 1. Notify the user that the cookie has expired
 2. Instruct them to run `document.cookie` in the browser console
 3. Update `~/.yapi_cookie_raw.txt` with the new value
+
+---
+
+## Incremental vs Full Generation
+
+**Default behavior: Incremental update**
+
+When `docs/yapi/{project}/` already exists:
+
+| Scenario | Behavior |
+|----------|----------|
+| User says "新增页面" or "添加接口" | Append new interface docs, keep existing |
+| User says "重新生成" or "覆盖" | Delete existing, regenerate all |
+| User provides URL without explicit intent | Ask: "已有文档，新增接口 or 重新生成？" |
+
+**Incremental process:**
+1. Check if `docs/yapi/{project}/README.md` exists
+2. If exists → ask user intent
+3. If incremental → only add/update specified interfaces
+4. Update README.md index with new entries
