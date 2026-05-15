@@ -128,3 +128,67 @@ Trigger this skill when:
    - DSL action `{ key: "submit", action: "handleSubmit" }` → `@click="handleSubmit"`
 
 **Output:** Write generated code to `src/views/<module>/<page>.vue`
+
+---
+
+## Step 4: Validation
+
+**Invoke pi-review:**
+
+```bash
+/pi-review --code-dir src/views/<module>/ --dsl-dir docs/dsl/integrated/
+```
+
+**Parse review outputs:**
+- Layer 1 score: API compliance (100% required)
+- Layer 2 score: DSL compliance (≥90% required)
+- Layer 2.5 score: DSL accuracy (≥90% required)
+- Layer 3 score: UI fidelity (≥80% required)
+- Verdict: PASS | FAIL | NEEDS_REVISION | DSL_REGENERATE
+
+---
+
+## Step 5: Result Judgment
+
+```
+        ┌── PASS (all thresholds met)
+        │   → End, output report
+        │
+        ├── FAIL (L1 < 100%)
+        │   → Step 6: Triangular Arbitration
+        │
+        ├── DSL_REGENERATE (L2.5 < 80%)
+        │   → DSL has errors, fix DSL first
+        │
+        └── NEEDS_REVISION
+            → Step 6: Triangular Arbitration
+```
+
+---
+
+## Step 6: Triangular Arbitration
+
+**Arbitration decision table:**
+
+| Issue Layer | Source | Fix Target | Action |
+|-------------|--------|------------|--------|
+| L1 (API error) | YApi | Code | Read YApi → fix API call in code |
+| L2 (DSL missing) | DSL | Code | Add missing component/field to code |
+| L2.5 (DSL wrong) | YApi/Modao | DSL | Fix DSL → regenerate page |
+| L3 (UI mismatch) | Modao | Code | Adjust layout/styles |
+
+**Execution flow:**
+
+1. **Classify each issue by layer**
+2. **Group by fix target (DSL or Code)**
+3. **For DSL fixes:**
+   - Read YApi or Modao to get correct value
+   - Update DSL file
+   - Regenerate affected pages
+4. **For Code fixes:**
+   - Apply specific corrections
+   - Keep other pages unchanged
+5. **Re-run validation (return to Step 4)**
+
+**Iteration limit: 3 attempts**
+- After 3 iterations, output current state + unresolved issues
