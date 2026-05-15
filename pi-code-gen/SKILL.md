@@ -192,3 +192,81 @@ Trigger this skill when:
 
 **Iteration limit: 3 attempts**
 - After 3 iterations, output current state + unresolved issues
+
+---
+
+## Output Artifacts
+
+```
+src/views/<module>/           # Generated pages
+├── list.vue
+├── detail.vue
+└── components/
+    └── search-form.vue
+
+docs/code-gen/                # Generation report
+├── report.md                 # Validation results + fix history
+├── issues-resolved.json      # Resolved issues list
+└── issues-unresolved.json    # Manual fix required
+```
+
+### report.md Template
+
+```markdown
+# Code Generation Report
+
+## Summary
+- Pages generated: 5
+- Generation time: YYYY-MM-DD HH:mm
+- Iterations: 2
+- Final verdict: PASS
+
+## Validation Results
+
+| Page | L1 | L2 | L2.5 | L3 | Verdict |
+|------|----|----|------|----|---------|
+| list.vue | 100% | 92% | 95% | 88% | PASS |
+| detail.vue | 100% | 90% | 92% | 85% | PASS |
+
+## Fix History
+
+### Iteration 1
+- list.vue: Fixed API URL (YApi arbitration)
+- detail.vue: Added missing field (DSL arbitration)
+
+### Iteration 2
+- list.vue: Adjusted table column order (Modao arbitration)
+
+## Unresolved Issues
+- None
+
+## References
+- DSL: docs/dsl/integrated/
+- CLAUDE.md: .claude/CLAUDE.md
+```
+
+---
+
+## Edge Cases
+
+| Scenario | Handling |
+|----------|----------|
+| CLAUDE.md missing | Use generic Vue conventions, warn user |
+| Template file missing | Use default structure, warn user |
+| DSL file missing | Abort, ask user to run Phase 2-3 first |
+| Max iterations reached | Output current state, list unresolved issues |
+| YApi/Modao inaccessible | Mark arbitration failed, manual fix required |
+| L1 API error persists | Block commit, require manual API fix |
+
+---
+
+## Verification Thresholds
+
+| Layer | Threshold | Priority |
+|-------|-----------|----------|
+| L1 (API) | 100% | BLOCKING |
+| L2 (DSL) | ≥90% | MAJOR |
+| L2.5 (DSL accuracy) | ≥90% | MAJOR |
+| L3 (UI) | ≥80% | MINOR |
+
+**PASS condition:** All thresholds met
