@@ -153,17 +153,32 @@ Depends on Phase 2 outputs. Both frontend and backend DSLs must be present.
 
 ## Phase 4 — Code Generation
 
-Developer or tool generates code from the integrated DSLs.
+**Invoke:** `pi-code-gen`
 
-**Inputs to code generation:**
-- `docs/dsl/integrated/` — full-stack specs
-- `docs/dsl/frontend/` — detailed component trees
-- `docs/dsl/backend/` — data validation rules
+**Trigger:** Automatically after Phase 3 (pi-integrate-fe-be) completes
 
-**Notable conventions (project-specific):**
-- Use `pi-form` for form layouts
-- Do not introduce new UI libraries
-- Reuse existing hooks and services
+**Inputs:**
+- `docs/dsl/integrated/*.dsl` — full-stack specs
+- Target project `.claude/CLAUDE.md` — encoding constraints
+- `docs/yapi/` — API contract (for arbitration)
+- `docs/modao/` — design reference (for arbitration)
+
+**Process:**
+1. Load constraints from CLAUDE.md
+2. Load integrated DSL files
+3. Generate Vue page code per DSL
+4. Invoke pi-review for validation
+5. Triangular arbitration for errors
+6. Iterate (max 3 times) until PASS
+
+**Outputs:**
+- `src/views/<module>/` — generated pages
+- `docs/code-gen/report.md` — generation report
+
+**Gate to Phase 5:**
+- All pages PASS → Auto proceed to Phase 5 (pi-review final)
+- Unresolved issues → Prompt user to confirm before Phase 5
+- L1 blocking errors → Block, require manual fix
 
 ---
 
