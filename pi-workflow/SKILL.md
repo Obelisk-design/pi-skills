@@ -267,6 +267,8 @@ node ~/.claude/skills/pi-review/scripts/dsl-compare.js \
 
 ## Quick Start
 
+**Traditional invocation:**
+
 When the user says "start the pipeline", "run full workflow", or "从原型到上线":
 
 1. Confirm the user has:
@@ -275,6 +277,19 @@ When the user says "start the pipeline", "run full workflow", or "从原型到�
 2. Run Phase 1a and 1b in parallel
 3. Proceed through phases sequentially
 4. Report a status summary after each phase
+
+**URL direct trigger (NEW):**
+
+When user provides a URL directly:
+
+| URL Type | Triggered Skill | Skill asks user intent |
+|----------|-----------------|------------------------|
+| `http://10.0.53.135/project/*/interface/api/*` | `pi-yapi` | 查看接口 / 导出 / 更新 / 重新生成 |
+| `https://modao.cc/proto/*/sharing` | `pi-modao-capture` | 截图捕获 / 查看 / UI对比 / 生成DSL |
+
+After URL-triggered skill completes:
+- If user chose "导出" or "截图捕获" → Proceed to Phase 2 (DSL Generation)
+- If user chose other options → End, no further phases
 
 ## Failure Recovery
 
