@@ -34,93 +34,15 @@ git clone --single-branch --depth 1 https://github.com/Obelisk-design/pi-skills.
 
 ## 技能列表
 
-### 1. pi-modao-capture
-
-从墨刀原型分享链接提取页面截图和标注。
-
-```bash
-/pi-modao-capture --url "https://modao.cc/proto/xxx/sharing" --password "可选密码"
-```
-
-**输出：**
-- `docs/modao/screenshots/*.png`
-- `docs/modao/*.md`
-
----
-
-### 2. pi-yapi
-
-从YApi平台导出接口文档到本地项目。
-
-```bash
-/pi-yapi http://10.0.53.135/project/xxx/interface/api/cat_xxx
-```
-
-**输出：**
-- `docs/yapi/{项目名}/README.md`
-- `docs/yapi/{项目名}/{ID}_{标题}.md`
-
----
-
-### 3. pi-fe-view-dsl-engine
-
-将墨刀截图转化为前端组件树DSL。
-
-**输入：** `docs/modao/`
-
-**输出：**
-- `docs/dsl/frontend/{页面}.dsl`
-
----
-
-### 4. pi-be-data-dsl-engine
-
-将YApi接口转化为数据转换DSL。
-
-**输入：** `docs/yapi/`
-
-**输出：**
-- `docs/dsl/backend/{接口}.dsl`
-
----
-
-### 5. pi-integrate-fe-be
-
-合成前端视图DSL和后端数据DSL。
-
-**输入：** `docs/dsl/frontend/` + `docs/dsl/backend/`
-
-**输出：**
-- `docs/dsl/integrated/{页面}.dsl`
-
----
-
-### 6. pi-review
-
-四层交叉验证生成的代码。
-
-```bash
-/pi-review
-```
-
-**验证层级：**
-
-| 层级 | 对比 | 优先级 | 阈值 |
-|------|------|--------|------|
-| Layer 1 | Code ↔ YApi | 阻塞级 | 100% |
-| Layer 2 | Code ↔ DSL | 主要级 | ≥90% |
-| Layer 2.5 | DSL ↔ Modao | 主要级 | ≥90% |
-| Layer 3 | Code ↔ Modao | 次要级 | ≥80% |
-
----
-
-### 7. pi-workflow
-
-协调所有技能按序执行的编排器。
-
-```bash
-/pi-workflow
-```
+| 技能 | 用途 | 触发命令 | 详细文档 |
+|------|------|----------|----------|
+| pi-modao-capture | 墨刀原型截图捕获 | `/pi-modao-capture` | [skill-pi-modao-capture.md](docs/skill-pi-modao-capture.md) |
+| pi-yapi | YApi接口文档导出 | `/pi-yapi` | [skill-pi-yapi.md](docs/skill-pi-yapi.md) |
+| pi-fe-view-dsl-engine | 前端视图DSL生成 | `/pi-fe-view-dsl-engine` | [skill-pi-fe-view-dsl-engine.md](docs/skill-pi-fe-view-dsl-engine.md) |
+| pi-be-data-dsl-engine | 后端数据DSL生成 | `/pi-be-data-dsl-engine` | [skill-pi-be-data-dsl-engine.md](docs/skill-pi-be-data-dsl-engine.md) |
+| pi-integrate-fe-be | DSL集成合并 | `/pi-integrate-fe-be` | [skill-pi-integrate-fe-be.md](docs/skill-pi-integrate-fe-be.md) |
+| pi-review | 三角交叉验证代码审查 | `/pi-review` | [skill-pi-review.md](docs/skill-pi-review.md) |
+| pi-workflow | 完整工作流编排 | `/pi-workflow` | [skill-pi-workflow.md](docs/skill-pi-workflow.md) |
 
 ---
 
@@ -177,10 +99,13 @@ pi-skills/
 │   └── SKILL.md
 ├── pi-fe-view-dsl-engine/ # 前端DSL技能
 │   └── SKILL.md
+│   └── scripts/
 ├── pi-be-data-dsl-engine/ # 后端DSL技能
 │   └── SKILL.md
+│   └── scripts/
 ├── pi-integrate-fe-be/    # DSL集成技能
 │   └── SKILL.md
+│   └── scripts/
 ├── pi-review/             # 代码审查技能
 │   └── SKILL.md
 │   └── scripts/
@@ -189,6 +114,11 @@ pi-skills/
 │   └── SKILL.md
 │   └── README-CN.md
 ├── docs/                  # 文档
+│   ├── skill-*.md         # 技能说明文档
+│   ├── dsl-value-analysis.md
+│   ├── dsl-error-analysis.md
+│   ├── triangular-validation-analysis.md
+│   └── PUBLISH-GUIDE.md   # 发布指南
 ├── scripts/               # 安装脚本
 ├── SKILL.md               # 入口技能
 ├── README.md              # 本文档
@@ -196,6 +126,30 @@ pi-skills/
 ├── setup                  # 安装脚本
 └── package.json           # npm配置
 ```
+
+---
+
+## 文档索引
+
+### 技能说明文档
+
+| 文档 | 说明 |
+|------|------|
+| [skill-pi-modao-capture.md](docs/skill-pi-modao-capture.md) | 墨刀原型捕获技能详细说明 |
+| [skill-pi-yapi.md](docs/skill-pi-yapi.md) | YApi接口导出技能详细说明 |
+| [skill-pi-fe-view-dsl-engine.md](docs/skill-pi-fe-view-dsl-engine.md) | 前端DSL生成技能详细说明 |
+| [skill-pi-be-data-dsl-engine.md](docs/skill-pi-be-data-dsl-engine.md) | 后端DSL生成技能详细说明 |
+| [skill-pi-integrate-fe-be.md](docs/skill-pi-integrate-fe-be.md) | DSL集成技能详细说明 |
+| [skill-pi-review.md](docs/skill-pi-review.md) | 三角验证审查技能详细说明 |
+| [skill-pi-workflow.md](docs/skill-pi-workflow.md) | 工作流编排技能详细说明 |
+
+### 分析报告文档
+
+| 文档 | 说明 |
+|------|------|
+| [dsl-value-analysis.md](docs/dsl-value-analysis.md) | DSL中间层价值分析 |
+| [dsl-error-analysis.md](docs/dsl-error-analysis.md) | DSL生成错误分析与应对 |
+| [triangular-validation-analysis.md](docs/triangular-validation-analysis.md) | 三角交叉验证原理分析 |
 
 ---
 
