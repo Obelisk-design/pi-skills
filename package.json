@@ -1,0 +1,37 @@
+{
+  "name": "pi-skills",
+  "version": "1.0.0",
+  "description": "PI-Skills — 前端开发全流程管理 AI 技能集合，从设计原型捕获到代码审查的完整开发链路",
+  "license": "MIT",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai-agent",
+    "frontend",
+    "dsl",
+    "code-review",
+    "modao",
+    "yapi",
+    "workflow"
+  ],
+  "author": "zihai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Obelisk-design/pi-skills.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.js"
+  },
+  "files": [
+    "pi-*",
+    "scripts",
+    "docs",
+    "SKILL.md",
+    "README.md",
+    "VERSION",
+    "setup"
+  ]
+}

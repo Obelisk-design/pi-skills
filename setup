@@ -1,0 +1,83 @@
+#!/bin/bash
+# PI-Skills Installation Script
+# Usage: ./setup [--team]
+
+set -e
+
+SKILLS_DIR="$HOME/.claude/skills/pi-skills"
+
+echo "=== PI-Skills Setup ==="
+echo ""
+
+# Check if running from the correct directory
+if [ ! -f "SKILL.md" ]; then
+    echo "Error: Please run this script from the pi-skills directory"
+    exit 1
+fi
+
+# Create skill symlinks for nested skills
+echo "Creating skill links..."
+for skill in pi-modao-capture pi-yapi pi-fe-view-dsl-engine pi-be-data-dsl-engine pi-integrate-fe-be pi-review pi-workflow; do
+    if [ -d "$skill" ]; then
+        # Skills are already in place, no need to move
+        echo "  ✓ $skill"
+    fi
+done
+
+# Copy scripts
+if [ -d "scripts" ]; then
+    echo "Scripts available:"
+    ls scripts/
+fi
+
+# Team mode setup
+TEAM_MODE=false
+if [ "$1" == "--team" ]; then
+    TEAM_MODE=true
+fi
+
+echo ""
+echo "=== Installation Complete ==="
+echo ""
+echo "Available skills:"
+echo "  /pi-modao-capture    — 墨刀原型捕获"
+echo "  /pi-yapi             — YApi接口导出"
+echo "  /pi-fe-view-dsl      — 前端DSL生成"
+echo "  /pi-be-data-dsl      — 后端DSL生成"
+echo "  /pi-integrate-fe-be  — DSL集成"
+echo "  /pi-review           — 三角验证审查"
+echo "  /pi-workflow         — 工作流编排"
+echo ""
+echo "=== Next Steps ==="
+echo ""
+echo "1. Add to your project CLAUDE.md:"
+echo ""
+echo "   ## PI-Skills"
+echo ""
+echo "   Available skills: /pi-modao-capture, /pi-yapi, /pi-fe-view-dsl-engine,"
+echo "   /pi-be-data-dsl-engine, /pi-integrate-fe-be, /pi-review, /pi-workflow"
+echo ""
+echo "2. Quick start workflow:"
+echo ""
+echo "   /pi-modao-capture --url \"墨刀链接\""
+echo "   /pi-yapi http://yapi/project/xxx/interface/api/cat_xxx"
+echo "   /pi-fe-view-dsl-engine"
+echo "   /pi-be-data-dsl-engine"
+echo "   /pi-integrate-fe-be"
+echo "   # (generate code based on DSL)"
+echo "   /pi-review"
+echo ""
+
+if [ "$TEAM_MODE" == "true" ]; then
+    echo "=== Team Mode ==="
+    echo ""
+    echo "To enable team-wide auto-update, add to project:"
+    echo ""
+    echo "  mkdir -p .claude/skills"
+    echo "  echo 'pi-skills' > .claude/skills/required"
+    echo "  git add .claude/ CLAUDE.md"
+    echo "  git commit -m 'require pi-skills for AI-assisted work'"
+    echo ""
+fi
+
+echo "Done!"
