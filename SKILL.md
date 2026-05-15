@@ -28,6 +28,7 @@ git clone --single-branch --depth 1 https://github.com/Obelisk-design/pi-skills.
 | pi-fe-view-dsl-engine | 前端视图DSL生成 | `/pi-fe-view-dsl-engine` |
 | pi-be-data-dsl-engine | 后端数据DSL生成 | `/pi-be-data-dsl-engine` |
 | pi-integrate-fe-be | DSL集成合并 | `/pi-integrate-fe-be` |
+| pi-code-gen | DSL到代码生成+验证循环 | `/pi-code-gen` |
 | pi-review | 三角交叉验证代码审查 | `/pi-review` |
 | pi-workflow | 完整工作流编排 | `/pi-workflow` |
 
@@ -56,7 +57,8 @@ Phase 3: DSL集成
                     ↓
 Phase 4: 代码生成
 ┌───────────────────────────────────────────┐
-│   开发者/工具基于DSL生成Vue页面代码       │
+│           pi-code-gen                      │
+│  从DSL生成代码+自动验证+迭代修正           │
 └───────────────────────────────────────────┘
                     ↓
 Phase 5: 三角交叉验证审查
